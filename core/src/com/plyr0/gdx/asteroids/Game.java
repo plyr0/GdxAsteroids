@@ -8,23 +8,26 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Game extends ApplicationAdapter {
-	public static int WIDTH;
+    public static int WIDTH;
     public static int HEIGHT;
     public static OrthographicCamera cam;
 
-	@Override
-	public void create () {
+    @Override
+    public void create() {
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();
-	}
+        cam = new OrthographicCamera(WIDTH, HEIGHT);
+        cam.translate(WIDTH / 2, HEIGHT / 2);
+        cam.update();
+    }
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	}
-	
-	@Override
-	public void dispose () {
-	}
+    @Override
+    public void render() {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
+
+    @Override
+    public void dispose() {
+    }
 }
