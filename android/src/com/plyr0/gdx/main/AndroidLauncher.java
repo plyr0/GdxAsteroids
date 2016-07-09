@@ -1,4 +1,4 @@
-package com.plyr0.gdx.asteroids;
+package com.plyr0.gdx.main;
 
 import android.os.Bundle;
 

@@ -1,8 +1,8 @@
-package com.plyr0.gdx.asteroids.desktop;
+package com.plyr0.gdx.main.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.plyr0.gdx.asteroids.Game;
+import com.plyr0.gdx.main.Game;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
