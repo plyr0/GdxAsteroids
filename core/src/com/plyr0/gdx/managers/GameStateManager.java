@@ -12,6 +12,7 @@ public class GameStateManager {
 
     public GameStateManager() {
         setState(PLAY);
+        gameState.init();
     }
 
     public void setState(int newState) {
@@ -21,6 +22,7 @@ public class GameStateManager {
         } else if (newState == PLAY) {
             gameState = new PlayState(this);
         }
+        if (gameState != null) gameState.init();
     }
 
     public void update(float dt) {

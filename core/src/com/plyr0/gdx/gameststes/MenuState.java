@@ -5,7 +5,6 @@ import com.plyr0.gdx.managers.GameStateManager;
 public class MenuState extends GameState {
     public MenuState(GameStateManager gameStateManager) {
         super(gameStateManager);
-        init();
     }
 
     @Override
