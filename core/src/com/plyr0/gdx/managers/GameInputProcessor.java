@@ -34,6 +34,7 @@ public class GameInputProcessor extends InputAdapter {
             case Input.Keys.ENTER:
                 GameKeys.setKey(GameKeys.ENTER, isPressed);
                 break;
+            case Input.Keys.Z:
             case Input.Keys.SPACE:
                 GameKeys.setKey(GameKeys.SPACE, isPressed);
                 break;
