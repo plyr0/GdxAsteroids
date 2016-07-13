@@ -10,12 +10,16 @@ public class Bullet extends SpaceObject {
     private boolean remove;
 
     public Bullet(float x, float y, float radians) {
+        this(x, y, radians, 0, 0);
+    }
+
+    public Bullet(float x, float y, float radians, float dx, float dy) {
         this.x = x;
         this.y = y;
         this.radians = radians;
         float speed = 350;
-        dx = MathUtils.cos(radians) * speed;
-        dy = MathUtils.sin(radians) * speed;
+        this.dx = MathUtils.cos(radians) * speed + dx;
+        this.dy = MathUtils.sin(radians) * speed + dy;
         width = height = 2;
         lifeTimeClock = 0;
         lifeTime = 1;

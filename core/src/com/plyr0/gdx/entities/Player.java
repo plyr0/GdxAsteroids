@@ -35,7 +35,6 @@ public class Player extends SpaceObject {
     }
 
 
-
     private void setShape() {
         shapex[0] = x + MathUtils.cos(radians) * 8;
         shapey[0] = y + MathUtils.sin(radians) * 8;
@@ -69,9 +68,10 @@ public class Player extends SpaceObject {
     }
 
     public void shoot() {
-         if(bullets.size()<MAX_BULLETS){
-             bullets.add(new Bullet(x, y, radians));
-         }
+        if (bullets.size() < MAX_BULLETS) {
+            if (Game.PLAYER_SPEED_AFFECTS_BULLETS) bullets.add(new Bullet(x, y, radians, dx, dy));
+            else bullets.add(new Bullet(x, y, radians));
+        }
     }
 
     @Override

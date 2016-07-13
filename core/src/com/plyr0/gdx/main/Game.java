@@ -10,6 +10,7 @@ import com.plyr0.gdx.managers.GameKeys;
 import com.plyr0.gdx.managers.GameStateManager;
 
 public class Game extends ApplicationAdapter {
+    public static final boolean PLAYER_SPEED_AFFECTS_BULLETS = true;
     public static int WIDTH;
     public static int HEIGHT;
     private static OrthographicCamera cam;
