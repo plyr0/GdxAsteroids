@@ -1,4 +1,4 @@
-package com.plyr0.gdx.gameststes;
+package com.plyr0.gdx.gamestates;
 
 import com.plyr0.gdx.managers.GameStateManager;
 

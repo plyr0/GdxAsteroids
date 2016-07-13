@@ -30,4 +30,12 @@ public abstract class SpaceObject {
     public abstract void update(float dt);
 
     public abstract void draw(ShapeRenderer renderer);
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
 }

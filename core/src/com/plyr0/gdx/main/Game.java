@@ -2,6 +2,7 @@ package com.plyr0.gdx.main;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.plyr0.gdx.managers.GameInputProcessor;
@@ -11,9 +12,10 @@ import com.plyr0.gdx.managers.GameStateManager;
 public class Game extends ApplicationAdapter {
     public static int WIDTH;
     public static int HEIGHT;
-    public static OrthographicCamera cam;
+    private static OrthographicCamera cam;
 
     private GameStateManager gameStateManager;
+    private FPSLogger fpsLogger;
 
     @Override
     public void create() {
@@ -25,8 +27,8 @@ public class Game extends ApplicationAdapter {
         cam.update();
 
         Gdx.input.setInputProcessor(new GameInputProcessor());
-
         gameStateManager = new GameStateManager();
+        fpsLogger = new FPSLogger();
     }
 
     @Override
@@ -38,5 +40,6 @@ public class Game extends ApplicationAdapter {
         gameStateManager.draw();
 
         GameKeys.update();
+        fpsLogger.log();
     }
 }

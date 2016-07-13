@@ -34,6 +34,8 @@ public class Player extends SpaceObject {
         this.bullets = bullets;
     }
 
+
+
     private void setShape() {
         shapex[0] = x + MathUtils.cos(radians) * 8;
         shapey[0] = y + MathUtils.sin(radians) * 8;

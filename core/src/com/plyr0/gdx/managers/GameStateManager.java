@@ -1,8 +1,8 @@
 package com.plyr0.gdx.managers;
 
-import com.plyr0.gdx.gameststes.GameState;
-import com.plyr0.gdx.gameststes.MenuState;
-import com.plyr0.gdx.gameststes.PlayState;
+import com.plyr0.gdx.gamestates.GameState;
+import com.plyr0.gdx.gamestates.MenuState;
+import com.plyr0.gdx.gamestates.PlayState;
 
 public class GameStateManager {
     private GameState gameState;
