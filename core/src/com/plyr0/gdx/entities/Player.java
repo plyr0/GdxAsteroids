@@ -7,7 +7,7 @@ import com.plyr0.gdx.main.Game;
 import java.util.List;
 
 public class Player extends SpaceObject {
-    private static final int MAX_BULLETS = 10;
+    private static final int MAX_BULLETS = 5;
     private static final int SHAPE_POINTS = 4;
     private boolean left;
     private boolean right;
@@ -69,8 +69,18 @@ public class Player extends SpaceObject {
 
     public void shoot() {
         if (bullets.size() < MAX_BULLETS) {
-            if (Game.PLAYER_SPEED_AFFECTS_BULLETS) bullets.add(new Bullet(x, y, radians, dx, dy));
-            else bullets.add(new Bullet(x, y, radians));
+            Bullet b;
+            if (Game.PLAYER_SPEED_AFFECTS_BULLETS) {
+                b = new Bullet(x, y, radians, dx, dy);
+            } else {
+                b = new Bullet(x, y, radians);
+            }
+            bullets.add(b);
+
+            if (Game.SHOOTING_AFFECTS_PLAYER_SPEED) {
+                dx -= b.dx / 10;
+                dy -= b.dy / 10;
+            }
         }
     }
 

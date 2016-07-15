@@ -11,6 +11,7 @@ import com.plyr0.gdx.managers.GameStateManager;
 
 public class Game extends ApplicationAdapter {
     public static final boolean PLAYER_SPEED_AFFECTS_BULLETS = false;
+    public static final boolean SHOOTING_AFFECTS_PLAYER_SPEED = false;
     public static int WIDTH;
     public static int HEIGHT;
     private static OrthographicCamera cam;
