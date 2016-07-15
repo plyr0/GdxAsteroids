@@ -125,4 +125,7 @@ public class Player extends SpaceObject {
     }
 
 
+    public void hit() {
+
+    }
 }
