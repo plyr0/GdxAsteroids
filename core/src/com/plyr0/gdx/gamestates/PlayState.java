@@ -82,22 +82,25 @@ public class PlayState extends GameState {
     }
 
     private void checkCollisions() {
+        List<Asteroid> toSplit = new ArrayList<Asteroid>();
         for (Iterator<Asteroid> ita = asteroids.iterator(); ita.hasNext(); ) {
             Asteroid a = ita.next();
             if (a.intersects(player)) {
                 ita.remove();
-                splitAsteroid(a);
+                toSplit.add(a);
                 player.hit();
-                return;
             } else for (Iterator<Bullet> itb = bullets.iterator(); itb.hasNext(); ) {
                 Bullet b = itb.next();
                 if (a.contains(b.getX(), b.getY())) {
                     ita.remove();
                     itb.remove();
-                    splitAsteroid(a);
+                    toSplit.add(a);
                     break;
                 }
             }
+        }
+        for (Asteroid a : toSplit) {
+            splitAsteroid(a);
         }
     }
 
