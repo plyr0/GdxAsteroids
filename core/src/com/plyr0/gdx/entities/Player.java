@@ -2,10 +2,10 @@ package com.plyr0.gdx.entities;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.plyr0.gdx.primitives.Line;
+import com.plyr0.gdx.primitives.Point;
 import com.plyr0.gdx.main.Game;
 
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.util.List;
 
 public class Player extends SpaceObject {
@@ -26,14 +26,14 @@ public class Player extends SpaceObject {
 
     private boolean dead;
     private boolean hit;
-    private Line2D.Float[] hitLines;
-    private Point2D.Float[] hitPoint;
+    private Line[] hitLines;
+    private Point[] hitPoint;
     private float hitTime;
     private float hitTimeCount;
 
     public Player(List<Bullet> bullets) {
-        x = Game.WIDTH / 2;
-        y = Game.HEIGHT / 2;
+        x = Game.getWidth() / 2;
+        y = Game.getHeight() / 2;
         shapex = new float[SHAPE_POINTS];
         shapey = new float[SHAPE_POINTS];
         radians = MathUtils.PI / 2;
@@ -160,7 +160,7 @@ public class Player extends SpaceObject {
         renderer.setColor(1, 1, 1, 1);
         renderer.begin(ShapeRenderer.ShapeType.Line);
         if (hit) {
-            for (Line2D.Float hitLine : hitLines) {
+            for (Line hitLine : hitLines) {
                 renderer.line(hitLine.x1, hitLine.y1, hitLine.x2, hitLine.y2);
             }
         } else {
@@ -180,21 +180,21 @@ public class Player extends SpaceObject {
         hit = true;
         dx = dy = 0;
         left = right = up = false;
-        hitLines = new Line2D.Float[4];
+        hitLines = new Line[4];
         for (int i = 0; i < shapex.length; i++) {
-            hitLines[i] = new Line2D.Float(shapex[i], shapey[i], shapex[(i + 1) % shapex.length],
+            hitLines[i] = new Line(shapex[i], shapey[i], shapex[(i + 1) % shapex.length],
                     shapey[(i + 1) % shapex.length]);
         }
-        hitPoint = new Point2D.Float[4];
-        hitPoint[0] = new Point2D.Float(MathUtils.cos(radians - 1.5f), MathUtils.sin(radians - 1.5f));
-        hitPoint[1] = new Point2D.Float(MathUtils.cos(radians - 2.8f), MathUtils.sin(radians - 2.8f));
-        hitPoint[2] = new Point2D.Float(MathUtils.cos(radians + 2.8f), MathUtils.sin(radians + 2.8f));
-        hitPoint[3] = new Point2D.Float(MathUtils.cos(radians + 1.5f), MathUtils.sin(radians + 1.5f));
+        hitPoint = new Point[4];
+        hitPoint[0] = new Point(MathUtils.cos(radians - 1.5f), MathUtils.sin(radians - 1.5f));
+        hitPoint[1] = new Point(MathUtils.cos(radians - 2.8f), MathUtils.sin(radians - 2.8f));
+        hitPoint[2] = new Point(MathUtils.cos(radians + 2.8f), MathUtils.sin(radians + 2.8f));
+        hitPoint[3] = new Point(MathUtils.cos(radians + 1.5f), MathUtils.sin(radians + 1.5f));
     }
 
     public void reset() {
-        x = Game.WIDTH / 2;
-        y = Game.HEIGHT / 2;
+        x = Game.getWidth() / 2;
+        y = Game.getHeight() / 2;
         hit = dead = false;
         setShape();
     }

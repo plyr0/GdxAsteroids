@@ -32,6 +32,5 @@ public class GameKeys {
 
     public static void setKey(int key, boolean isPressed) {
         keys[key] = isPressed;
-        //System.out.println("keys=" + Arrays.toString(keys) + " old=" + Arrays.toString(oldKeys));
     }
 }

@@ -12,25 +12,33 @@ import com.plyr0.gdx.managers.GameStateManager;
 public class Game extends ApplicationAdapter {
     public static final boolean PLAYER_SPEED_AFFECTS_BULLETS = false;
     public static final boolean SHOOTING_AFFECTS_PLAYER_SPEED = false;
-    public static int WIDTH;
-    public static int HEIGHT;
-    private static OrthographicCamera cam;
 
+    private static int width;
+    private static int height;
+    private static OrthographicCamera cam;
     private GameStateManager gameStateManager;
     private FPSLogger fpsLogger;
 
     @Override
     public void create() {
-        WIDTH = Gdx.graphics.getWidth();
-        HEIGHT = Gdx.graphics.getHeight();
+        width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
 
-        cam = new OrthographicCamera(WIDTH, HEIGHT);
-        cam.translate(WIDTH / 2, HEIGHT / 2);
+        cam = new OrthographicCamera(width, height);
+        cam.translate(width / 2, height / 2);
         cam.update();
 
         Gdx.input.setInputProcessor(new GameInputProcessor());
         gameStateManager = new GameStateManager();
         fpsLogger = new FPSLogger();
+    }
+
+    public static int getWidth() {
+        return width;
+    }
+
+    public static int getHeight() {
+        return height;
     }
 
     @Override

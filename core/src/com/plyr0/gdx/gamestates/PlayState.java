@@ -16,13 +16,13 @@ import java.util.List;
 
 public class PlayState extends GameState {
 
-    private ShapeRenderer renderer;
-    private Player player;
-    private List<Bullet> bullets;
-    private List<Asteroid> asteroids;
-    private List<Particle> particles;
+    private List<Bullet> bullets = new ArrayList<Bullet>();
+    private Player player = new Player(bullets);
+    private List<Asteroid> asteroids = new ArrayList<Asteroid>();
+    private List<Particle> particles = new ArrayList<Particle>();
+    private ShapeRenderer renderer = new ShapeRenderer();
 
-    private int level;
+    private int level = 1;
     private int numAsteroidsTotal;
     private int numAsteroidsLeft;
 
@@ -32,25 +32,18 @@ public class PlayState extends GameState {
 
     @Override
     public void init() {
-        renderer = new ShapeRenderer();
-        bullets = new ArrayList<Bullet>();
-        player = new Player(bullets);
-        asteroids = new ArrayList<Asteroid>();
-        particles = new ArrayList<Particle>();
-        level = 1;
         spawnAsteroids();
     }
 
     private void spawnAsteroids() {
         asteroids.clear();
-        int numToSpawn = level;
+        int numToSpawn = 3 + level;
         numAsteroidsLeft = numAsteroidsTotal = numToSpawn * 7; //large = 2 * medium; medium = 2 * small
         for (int i = 0; i < numToSpawn; i++) {
-            float x = MathUtils.random(Game.WIDTH);
-            float y = MathUtils.random(Game.HEIGHT);
+            float x = MathUtils.random(Game.getWidth());
+            float y = MathUtils.random(Game.getHeight());
             float dx = x - player.getX();
             float dy = y - player.getY();
-
             float dist = (float) Math.sqrt(dx * dx + dy * dy);
             if (dist < 100) {
                 --i;
@@ -67,9 +60,11 @@ public class PlayState extends GameState {
     @Override
     public void update(float dt) {
         if (numAsteroidsLeft == 0) {
+            for (int i = 0; i < 10; i++) {
+                createParticles(MathUtils.random(Game.getWidth()), MathUtils.random(Game.getHeight()));
+            }
             ++level;
             spawnAsteroids();
-            for (int i = 0; i < 10; i++) createParticles(MathUtils.random(Game.WIDTH), MathUtils.random(Game.HEIGHT));
         }
 
         handleInput();
@@ -85,11 +80,8 @@ public class PlayState extends GameState {
             if (b.shouldRemove()) it.remove();
         }
 
-        Iterator<Asteroid> it2 = asteroids.iterator();
-        while (it2.hasNext()) {
-            Asteroid a = it2.next();
+        for (Asteroid a : asteroids) {
             a.update(dt);
-            if (a.shouldRemove()) it2.remove();
         }
 
         Iterator<Particle> it3 = particles.iterator();
@@ -139,16 +131,16 @@ public class PlayState extends GameState {
 
     @Override
     public void draw() {
-        player.draw(renderer);
-        for (Bullet b : bullets) {
-            b.draw(renderer);
-        }
         for (Asteroid a : asteroids) {
             a.draw(renderer);
         }
         for (Particle p : particles) {
             p.draw(renderer);
         }
+        for (Bullet b : bullets) {
+            b.draw(renderer);
+        }
+        player.draw(renderer);
     }
 
     @Override
@@ -163,6 +155,5 @@ public class PlayState extends GameState {
 
     @Override
     public void dispose() {
-
     }
 }

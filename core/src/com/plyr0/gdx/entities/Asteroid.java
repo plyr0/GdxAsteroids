@@ -7,10 +7,8 @@ public class Asteroid extends SpaceObject {
     public static final int SMALL = 0;
     public static final int MEDIUM = 1;
     public static final int LARGE = 2;
+
     private int type;
-
-    public boolean remove;
-
     private int numPoints;
     private float[] dists;
 
@@ -60,10 +58,6 @@ public class Asteroid extends SpaceObject {
 
     public int getType() {
         return type;
-    }
-
-    public boolean shouldRemove() {
-        return remove;
     }
 
     @Override

@@ -5,29 +5,26 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class Bullet extends SpaceObject {
 
-    private float lifeTime;
-    private float lifeTimeClock;
-    private boolean remove;
+    private float lifeTime = 1;
+    private float lifeTimeClock = 0;
+    private boolean removeFlag;
 
     public Bullet(float x, float y, float radians) {
         this(x, y, radians, 0, 0);
     }
 
     public Bullet(float x, float y, float radians, float dx, float dy) {
+        width = height = 2;
+        speed = 350;
         this.x = x;
         this.y = y;
         this.radians = radians;
-        float speed = 350;
         this.dx = MathUtils.cos(radians) * speed + dx;
         this.dy = MathUtils.sin(radians) * speed + dy;
-        width = height = 2;
-        lifeTimeClock = 0;
-        lifeTime = 1;
     }
 
-
     public boolean shouldRemove() {
-        return remove;
+        return removeFlag;
     }
 
     @Override
@@ -36,7 +33,7 @@ public class Bullet extends SpaceObject {
         y += dy * dt;
         wrap();
         lifeTimeClock += dt;
-        if (lifeTimeClock >= lifeTime) remove = true;
+        if (lifeTimeClock >= lifeTime) removeFlag = true;
     }
 
     @Override

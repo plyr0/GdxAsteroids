@@ -5,8 +5,8 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class Particle extends SpaceObject {
 
-    private float time;
-    private float timeCounter;
+    private float timeToLive = 1;
+    private float timeCounter = 0;
     private boolean remove;
 
     public Particle(float x, float y) {
@@ -17,8 +17,6 @@ public class Particle extends SpaceObject {
         radians = MathUtils.random(MathUtils.PI2);
         dx = MathUtils.cos(radians) * speed;
         dy = MathUtils.sin(radians) * speed;
-        timeCounter = 0;
-        time = 1;
     }
 
     public boolean shouldRemove() {
@@ -30,7 +28,7 @@ public class Particle extends SpaceObject {
         x += dx * dt;
         y += dy * dt;
         timeCounter += dt;
-        if (timeCounter > time) remove = true;
+        if (timeCounter > timeToLive) remove = true;
     }
 
     @Override

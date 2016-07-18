@@ -21,10 +21,10 @@ public abstract class SpaceObject {
     protected float[] shapey;
 
     protected void wrap() {
-        if (x < 0) x = Game.WIDTH;
-        if (y < 0) y = Game.HEIGHT;
-        if (x > Game.WIDTH) x = 0;
-        if (y > Game.HEIGHT) y = 0;
+        if (x < 0) x = Game.getWidth();
+        if (y < 0) y = Game.getHeight();
+        if (x > Game.getWidth()) x = 0;
+        if (y > Game.getHeight()) y = 0;
     }
 
     public abstract void update(float dt);
