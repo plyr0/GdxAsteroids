@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.plyr0.gdx.main.Game;
 
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 public class Player extends SpaceObject {
@@ -22,6 +24,13 @@ public class Player extends SpaceObject {
 
     private List<Bullet> bullets;
 
+    private boolean dead;
+    private boolean hit;
+    private Line2D.Float[] hitLines;
+    private Point2D.Float[] hitPoint;
+    private float hitTime;
+    private float hitTimeCount;
+
     public Player(List<Bullet> bullets) {
         x = Game.WIDTH / 2;
         y = Game.HEIGHT / 2;
@@ -32,8 +41,10 @@ public class Player extends SpaceObject {
         flamex = new float[3];
         flamey = new float[3];
         this.bullets = bullets;
+        hit = false;
+        hitTimeCount = 0;
+        hitTime = 3;
     }
-
 
     private void setShape() {
         shapex[0] = x + MathUtils.cos(radians) * 8;
@@ -67,8 +78,16 @@ public class Player extends SpaceObject {
         up = flag;
     }
 
+    public boolean isDead() {
+        return dead;
+    }
+
+    public boolean isHit() {
+        return hit;
+    }
+
     public void shoot() {
-        if (bullets.size() < MAX_BULLETS) {
+        if (bullets.size() < MAX_BULLETS && !hit && !dead) {
             Bullet b;
             if (Game.PLAYER_SPEED_AFFECTS_BULLETS) {
                 b = new Bullet(x, y, radians, dx, dy);
@@ -86,6 +105,21 @@ public class Player extends SpaceObject {
 
     @Override
     public void update(float dt) {
+        if (hit) {
+            hitTimeCount += dt;
+            if (hitTimeCount > hitTime) {
+                dead = true;
+                hitTimeCount = 0;
+            }
+            for (int i = 0; i < hitLines.length; i++) {
+                hitLines[i].setLine(hitLines[i].x1 + hitPoint[i].x * 10 * dt,
+                        hitLines[i].y1 + hitPoint[i].y * 10 * dt,
+                        hitLines[i].x2 + hitPoint[i].x * 10 * dt,
+                        hitLines[i].y2 + hitPoint[i].y * 10 * dt);
+            }
+            return;
+        }
+
         if (left) {
             radians += rotationSpeed * dt;
         } else if (right) {
@@ -125,17 +159,43 @@ public class Player extends SpaceObject {
     public void draw(ShapeRenderer renderer) {
         renderer.setColor(1, 1, 1, 1);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        for (int i = 0; i < SHAPE_POINTS; i++) {
-            renderer.line(shapex[i], shapey[i], shapex[(i + 1) % SHAPE_POINTS], shapey[(i + 1) % SHAPE_POINTS]);
-        }
-        if (up) for (int i = 0; i < 3; i++) {
-            renderer.line(flamex[i], flamey[i], flamex[(i + 1) % 3], flamey[(i + 1) % 3]);
+        if (hit) {
+            for (Line2D.Float hitLine : hitLines) {
+                renderer.line(hitLine.x1, hitLine.y1, hitLine.x2, hitLine.y2);
+            }
+        } else {
+            for (int i = 0; i < SHAPE_POINTS; i++) {
+                renderer.line(shapex[i], shapey[i], shapex[(i + 1) % SHAPE_POINTS], shapey[(i + 1) % SHAPE_POINTS]);
+            }
+            if (up) for (int i = 0; i < 3; i++) {
+                renderer.line(flamex[i], flamey[i], flamex[(i + 1) % 3], flamey[(i + 1) % 3]);
+            }
         }
         renderer.end();
     }
 
 
     public void hit() {
+        if (hit) return;
+        hit = true;
+        dx = dy = 0;
+        left = right = up = false;
+        hitLines = new Line2D.Float[4];
+        for (int i = 0; i < shapex.length; i++) {
+            hitLines[i] = new Line2D.Float(shapex[i], shapey[i], shapex[(i + 1) % shapex.length],
+                    shapey[(i + 1) % shapex.length]);
+        }
+        hitPoint = new Point2D.Float[4];
+        hitPoint[0] = new Point2D.Float(MathUtils.cos(radians - 1.5f), MathUtils.sin(radians - 1.5f));
+        hitPoint[1] = new Point2D.Float(MathUtils.cos(radians - 2.8f), MathUtils.sin(radians - 2.8f));
+        hitPoint[2] = new Point2D.Float(MathUtils.cos(radians + 2.8f), MathUtils.sin(radians + 2.8f));
+        hitPoint[3] = new Point2D.Float(MathUtils.cos(radians + 1.5f), MathUtils.sin(radians + 1.5f));
+    }
 
+    public void reset() {
+        x = Game.WIDTH / 2;
+        y = Game.HEIGHT / 2;
+        hit = dead = false;
+        setShape();
     }
 }

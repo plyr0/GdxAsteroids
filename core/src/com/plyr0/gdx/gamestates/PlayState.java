@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.plyr0.gdx.entities.Asteroid;
 import com.plyr0.gdx.entities.Bullet;
+import com.plyr0.gdx.entities.Particle;
 import com.plyr0.gdx.entities.Player;
 import com.plyr0.gdx.main.Game;
 import com.plyr0.gdx.managers.GameKeys;
@@ -19,6 +20,7 @@ public class PlayState extends GameState {
     private Player player;
     private List<Bullet> bullets;
     private List<Asteroid> asteroids;
+    private List<Particle> particles;
 
     private int level;
     private int numAsteroidsTotal;
@@ -34,15 +36,14 @@ public class PlayState extends GameState {
         bullets = new ArrayList<Bullet>();
         player = new Player(bullets);
         asteroids = new ArrayList<Asteroid>();
-
+        particles = new ArrayList<Particle>();
         level = 1;
-
         spawnAsteroids();
     }
 
     private void spawnAsteroids() {
         asteroids.clear();
-        int numToSpawn = 3 + level;
+        int numToSpawn = level;
         numAsteroidsLeft = numAsteroidsTotal = numToSpawn * 7; //large = 2 * medium; medium = 2 * small
         for (int i = 0; i < numToSpawn; i++) {
             float x = MathUtils.random(Game.WIDTH);
@@ -59,10 +60,23 @@ public class PlayState extends GameState {
         }
     }
 
+    private void createParticles(float x, float y) {
+        for (int i = 0; i < 6; i++) particles.add(new Particle(x, y));
+    }
+
     @Override
     public void update(float dt) {
+        if (numAsteroidsLeft == 0) {
+            ++level;
+            spawnAsteroids();
+            for (int i = 0; i < 10; i++) createParticles(MathUtils.random(Game.WIDTH), MathUtils.random(Game.HEIGHT));
+        }
+
         handleInput();
         player.update(dt);
+        if (player.isDead()) {
+            player.reset();
+        }
 
         Iterator<Bullet> it = bullets.iterator();
         while (it.hasNext()) {
@@ -78,6 +92,13 @@ public class PlayState extends GameState {
             if (a.shouldRemove()) it2.remove();
         }
 
+        Iterator<Particle> it3 = particles.iterator();
+        while (it3.hasNext()) {
+            Particle p = it3.next();
+            p.update(dt);
+            if (p.shouldRemove()) it3.remove();
+        }
+
         checkCollisions();
     }
 
@@ -85,7 +106,7 @@ public class PlayState extends GameState {
         List<Asteroid> toSplit = new ArrayList<Asteroid>();
         for (Iterator<Asteroid> ita = asteroids.iterator(); ita.hasNext(); ) {
             Asteroid a = ita.next();
-            if (a.intersects(player)) {
+            if (!player.isHit() && a.intersects(player)) {
                 ita.remove();
                 toSplit.add(a);
                 player.hit();
@@ -113,6 +134,7 @@ public class PlayState extends GameState {
             asteroids.add(new Asteroid(asteroid.getX(), asteroid.getY(), Asteroid.SMALL));
             asteroids.add(new Asteroid(asteroid.getX(), asteroid.getY(), Asteroid.SMALL));
         }
+        createParticles(asteroid.getX(), asteroid.getY());
     }
 
     @Override
@@ -123,6 +145,9 @@ public class PlayState extends GameState {
         }
         for (Asteroid a : asteroids) {
             a.draw(renderer);
+        }
+        for (Particle p : particles) {
+            p.draw(renderer);
         }
     }
 
