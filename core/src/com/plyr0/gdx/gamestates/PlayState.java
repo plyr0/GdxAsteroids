@@ -19,8 +19,9 @@ public class PlayState extends GameState {
     private List<Bullet> bullets = new ArrayList<Bullet>();
     private Player player = new Player(bullets);
     private List<Asteroid> asteroids = new ArrayList<Asteroid>();
-    private List<Particle> particles = new ArrayList<Particle>();
     private ShapeRenderer renderer = new ShapeRenderer();
+    private Particle[] particlePool = new Particle[30];
+    private int particlePointer = 0;
 
     private int level = 1;
     private int numAsteroidsTotal;
@@ -33,6 +34,9 @@ public class PlayState extends GameState {
     @Override
     public void init() {
         spawnAsteroids();
+        for (int i = 0; i < particlePool.length; i++) {
+            particlePool[i] = new Particle();
+        }
     }
 
     private void spawnAsteroids() {
@@ -54,13 +58,16 @@ public class PlayState extends GameState {
     }
 
     private void createParticles(float x, float y) {
-        for (int i = 0; i < 6; i++) particles.add(new Particle(x, y));
+        for (int i = 0; i < 6; i++) {
+            particlePool[particlePointer].spawn(x, y);
+            particlePointer = (particlePointer + 1) % particlePool.length;
+        }
     }
 
     @Override
     public void update(float dt) {
         if (numAsteroidsLeft == 0) {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 5; i++) {
                 createParticles(MathUtils.random(Game.getWidth()), MathUtils.random(Game.getHeight()));
             }
             ++level;
@@ -84,13 +91,9 @@ public class PlayState extends GameState {
             a.update(dt);
         }
 
-        Iterator<Particle> it3 = particles.iterator();
-        while (it3.hasNext()) {
-            Particle p = it3.next();
+        for (Particle p : particlePool) {
             p.update(dt);
-            if (p.shouldRemove()) it3.remove();
         }
-
         checkCollisions();
     }
 
@@ -134,7 +137,7 @@ public class PlayState extends GameState {
         for (Asteroid a : asteroids) {
             a.draw(renderer);
         }
-        for (Particle p : particles) {
+        for (Particle p : particlePool) {
             p.draw(renderer);
         }
         for (Bullet b : bullets) {

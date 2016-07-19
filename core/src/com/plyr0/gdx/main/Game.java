@@ -10,12 +10,12 @@ import com.plyr0.gdx.managers.GameKeys;
 import com.plyr0.gdx.managers.GameStateManager;
 
 public class Game extends ApplicationAdapter {
-    public static final boolean PLAYER_SPEED_AFFECTS_BULLETS = false;
+    public static final boolean PLAYER_SPEED_AFFECTS_BULLETS = true;
     public static final boolean SHOOTING_AFFECTS_PLAYER_SPEED = false;
+    public static final float DECELERATION = 0;
 
     private static int width;
     private static int height;
-    private static OrthographicCamera cam;
     private GameStateManager gameStateManager;
     private FPSLogger fpsLogger;
 
@@ -23,8 +23,9 @@ public class Game extends ApplicationAdapter {
     public void create() {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
+        Gdx.app.log("Game", "screen: " + width + " x " + height);
 
-        cam = new OrthographicCamera(width, height);
+        OrthographicCamera cam = new OrthographicCamera(width, height);
         cam.translate(width / 2, height / 2);
         cam.update();
 
@@ -50,6 +51,6 @@ public class Game extends ApplicationAdapter {
         gameStateManager.draw();
 
         GameKeys.update();
-        fpsLogger.log();
+        //fpsLogger.log();
     }
 }

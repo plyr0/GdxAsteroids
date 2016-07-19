@@ -9,14 +9,14 @@ import com.plyr0.gdx.main.Game;
 import java.util.List;
 
 public class Player extends SpaceObject {
-    private static final int MAX_BULLETS = 5;
+    private static final int MAX_BULLETS = 4;
     private static final int SHAPE_POINTS = 4;
     private boolean left;
     private boolean right;
     private boolean up;
     private float maxSpeed = 300; // px/s
     private float accelaration = 200;
-    private float decelaration = 10;
+    private float decelaration = Game.DECELERATION;
 
     private float[] flamex;
     private float[] flamey;
@@ -97,8 +97,8 @@ public class Player extends SpaceObject {
             bullets.add(b);
 
             if (Game.SHOOTING_AFFECTS_PLAYER_SPEED) {
-                dx -= b.dx / 10;
-                dy -= b.dy / 10;
+                dx -= b.dx / 20;
+                dy -= b.dy / 20;
             }
         }
     }
