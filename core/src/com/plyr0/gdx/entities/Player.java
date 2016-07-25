@@ -18,6 +18,10 @@ public class Player extends SpaceObject {
     private float accelaration = 200;
     private float decelaration = Game.DECELERATION;
 
+    private long score = 0;
+    private int extraLives = 3;
+    private long requiredScore = 10000;
+
     private float[] flamex;
     private float[] flamey;
     private float accelarationTimer;
@@ -105,6 +109,10 @@ public class Player extends SpaceObject {
 
     @Override
     public void update(float dt) {
+        if (score >= requiredScore) {
+            ++extraLives;
+            requiredScore += 10000;
+        }
         if (hit) {
             hitTimeCount += dt;
             if (hitTimeCount > hitTime) {
@@ -197,5 +205,21 @@ public class Player extends SpaceObject {
         y = Game.getHeight() / 2;
         hit = dead = false;
         setShape();
+    }
+
+    public long getScore() {
+        return score;
+    }
+
+    public int getExtraLives() {
+        return extraLives;
+    }
+
+    public void decrementLives() {
+        --extraLives;
+    }
+
+    public void incrementScore(long score) {
+        this.score += score;
     }
 }

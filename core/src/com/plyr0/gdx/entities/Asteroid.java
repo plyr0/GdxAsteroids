@@ -11,6 +11,7 @@ public class Asteroid extends SpaceObject {
     private int type;
     private int numPoints;
     private float[] dists;
+    private long score;
 
     public Asteroid(float x, float y, int type) {
         this.x = x;
@@ -21,14 +22,17 @@ public class Asteroid extends SpaceObject {
             numPoints = 8;
             width = height = 12;
             speed = MathUtils.random(70, 100);
+            score = 100;
         } else if (type == MEDIUM) {
             numPoints = 10;
             width = height = 20;
             speed = MathUtils.random(50, 60);
+            score = 50;
         } else if (type == LARGE) {
             numPoints = 12;
             width = height = 40;
             speed = MathUtils.random(20, 30);
+            score = 20;
         }
         rotationSpeed = MathUtils.random(-1, 1);
         radians = MathUtils.random(MathUtils.PI2);
@@ -76,5 +80,9 @@ public class Asteroid extends SpaceObject {
             renderer.line(shapex[i], shapey[i], shapex[(i + 1) % numPoints], shapey[(i + 1) % numPoints]);
         }
         renderer.end();
+    }
+
+    public long getScore() {
+        return score;
     }
 }

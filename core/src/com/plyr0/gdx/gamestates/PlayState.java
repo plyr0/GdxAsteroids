@@ -1,5 +1,9 @@
 package com.plyr0.gdx.gamestates;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.plyr0.gdx.entities.Asteroid;
@@ -16,6 +20,8 @@ import java.util.List;
 
 public class PlayState extends GameState {
 
+    private SpriteBatch spriteBatch = new SpriteBatch();
+    private BitmapFont font = new BitmapFont();
     private List<Bullet> bullets = new ArrayList<Bullet>();
     private Player player = new Player(bullets);
     private List<Asteroid> asteroids = new ArrayList<Asteroid>();
@@ -37,6 +43,11 @@ public class PlayState extends GameState {
         for (int i = 0; i < particlePool.length; i++) {
             particlePool[i] = new Particle();
         }
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace Bold.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 20;
+        font = generator.generateFont(parameter);
+        generator.dispose();
     }
 
     private void spawnAsteroids() {
@@ -78,6 +89,7 @@ public class PlayState extends GameState {
         player.update(dt);
         if (player.isDead()) {
             player.reset();
+            player.decrementLives();
         }
 
         Iterator<Bullet> it = bullets.iterator();
@@ -111,6 +123,7 @@ public class PlayState extends GameState {
                     ita.remove();
                     itb.remove();
                     toSplit.add(a);
+                    player.incrementScore(a.getScore());
                     break;
                 }
             }
@@ -144,6 +157,10 @@ public class PlayState extends GameState {
             b.draw(renderer);
         }
         player.draw(renderer);
+        spriteBatch.setColor(1,1,1,1);
+        spriteBatch.begin();
+        font.draw(spriteBatch, Long.toString(player.getScore()), 40, 390);
+        spriteBatch.end();
     }
 
     @Override
