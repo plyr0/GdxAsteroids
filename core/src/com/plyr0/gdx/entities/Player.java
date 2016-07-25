@@ -222,4 +222,11 @@ public class Player extends SpaceObject {
     public void incrementScore(long score) {
         this.score += score;
     }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        setShape();
+
+    }
 }

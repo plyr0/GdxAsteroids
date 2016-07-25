@@ -20,12 +20,13 @@ import java.util.List;
 
 public class PlayState extends GameState {
 
-    private SpriteBatch spriteBatch = new SpriteBatch();
+    private SpriteBatch batch = new SpriteBatch();
     private BitmapFont font = new BitmapFont();
     private List<Bullet> bullets = new ArrayList<Bullet>();
     private Player player = new Player(bullets);
+    private Player hud = new Player(null);
     private List<Asteroid> asteroids = new ArrayList<Asteroid>();
-    private ShapeRenderer renderer = new ShapeRenderer();
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Particle[] particlePool = new Particle[30];
     private int particlePointer = 0;
 
@@ -148,19 +149,25 @@ public class PlayState extends GameState {
     @Override
     public void draw() {
         for (Asteroid a : asteroids) {
-            a.draw(renderer);
+            a.draw(shapeRenderer);
         }
         for (Particle p : particlePool) {
-            p.draw(renderer);
+            p.draw(shapeRenderer);
         }
         for (Bullet b : bullets) {
-            b.draw(renderer);
+            b.draw(shapeRenderer);
         }
-        player.draw(renderer);
-        spriteBatch.setColor(1,1,1,1);
-        spriteBatch.begin();
-        font.draw(spriteBatch, Long.toString(player.getScore()), 40, 390);
-        spriteBatch.end();
+        player.draw(shapeRenderer);
+
+        batch.setColor(1, 1, 1, 1);
+        batch.begin();
+        font.draw(batch, Long.toString(player.getScore()), 40, 390);
+        batch.end();
+
+        for (int i = 0; i < player.getExtraLives(); i++) {
+            hud.setPosition(40 + i * 11, 360);
+            hud.draw(shapeRenderer);
+        }
     }
 
     @Override

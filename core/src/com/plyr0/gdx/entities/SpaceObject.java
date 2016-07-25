@@ -27,6 +27,11 @@ public abstract class SpaceObject {
         if (y > Game.getHeight()) y = 0;
     }
 
+    public void setPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public abstract void update(float dt);
 
     public abstract void draw(ShapeRenderer renderer);
