@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.plyr0.gdx.managers.GameInputProcessor;
 import com.plyr0.gdx.managers.GameKeys;
 import com.plyr0.gdx.managers.GameStateManager;
+import com.plyr0.gdx.managers.SoundManager;
 
 public class Game extends ApplicationAdapter {
     public static final boolean PLAYER_SPEED_AFFECTS_BULLETS = true;
@@ -32,6 +33,8 @@ public class Game extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new GameInputProcessor());
         gameStateManager = new GameStateManager();
         fpsLogger = new FPSLogger();
+
+        SoundManager.loadAll();
     }
 
     public static int getWidth() {

@@ -2,6 +2,7 @@ package com.plyr0.gdx.entities;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.plyr0.gdx.managers.SoundManager;
 import com.plyr0.gdx.primitives.Line;
 import com.plyr0.gdx.primitives.Point;
 import com.plyr0.gdx.main.Game;
@@ -79,6 +80,11 @@ public class Player extends SpaceObject {
     }
 
     public void setUp(boolean flag) {
+        if(flag && !up){
+            SoundManager.loop("thruster");
+        } else if(!flag) {
+            SoundManager.stop("thruster");
+        }
         up = flag;
     }
 
@@ -91,6 +97,7 @@ public class Player extends SpaceObject {
     }
 
     public void shoot() {
+        SoundManager.play("shoot");
         if (bullets.size() < MAX_BULLETS && !hit && !dead) {
             Bullet b;
             if (Game.PLAYER_SPEED_AFFECTS_BULLETS) {
@@ -112,8 +119,10 @@ public class Player extends SpaceObject {
         if (score >= requiredScore) {
             ++extraLives;
             requiredScore += 10000;
+            SoundManager.stop("extralife");
         }
         if (hit) {
+            SoundManager.stop("thruster");
             hitTimeCount += dt;
             if (hitTimeCount > hitTime) {
                 dead = true;

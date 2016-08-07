@@ -13,6 +13,7 @@ import com.plyr0.gdx.entities.Player;
 import com.plyr0.gdx.main.Game;
 import com.plyr0.gdx.managers.GameKeys;
 import com.plyr0.gdx.managers.GameStateManager;
+import com.plyr0.gdx.managers.SoundManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,6 +35,12 @@ public class PlayState extends GameState {
     private int numAsteroidsTotal;
     private int numAsteroidsLeft;
 
+    private float maxDelay = 1;
+    private float minDelay = 0.25f;
+    private float currentDelay = maxDelay;
+    private float bgTimer = maxDelay;
+    private boolean isLowPulse = true;
+
     public PlayState(GameStateManager gameStateManager) {
         super(gameStateManager);
     }
@@ -52,6 +59,7 @@ public class PlayState extends GameState {
     }
 
     private void spawnAsteroids() {
+        currentDelay = maxDelay;
         asteroids.clear();
         int numToSpawn = 3 + level;
         numAsteroidsLeft = numAsteroidsTotal = numToSpawn * 7; //large = 2 * medium; medium = 2 * small
@@ -108,6 +116,17 @@ public class PlayState extends GameState {
             p.update(dt);
         }
         checkCollisions();
+
+        bgTimer += dt;
+        if (!player.isHit() && bgTimer >= currentDelay) {
+            if (isLowPulse) {
+                SoundManager.play("pulselow");
+            } else {
+                SoundManager.play("pulsehigh");
+            }
+            isLowPulse = !isLowPulse;
+            bgTimer = 0.0f;
+        }
     }
 
     private void checkCollisions() {
@@ -118,6 +137,7 @@ public class PlayState extends GameState {
                 ita.remove();
                 toSplit.add(a);
                 player.hit();
+                SoundManager.play("explode");
             } else for (Iterator<Bullet> itb = bullets.iterator(); itb.hasNext(); ) {
                 Bullet b = itb.next();
                 if (a.contains(b.getX(), b.getY())) {
@@ -125,6 +145,7 @@ public class PlayState extends GameState {
                     itb.remove();
                     toSplit.add(a);
                     player.incrementScore(a.getScore());
+                    SoundManager.play("explode");
                     break;
                 }
             }
@@ -144,6 +165,7 @@ public class PlayState extends GameState {
             asteroids.add(new Asteroid(asteroid.getX(), asteroid.getY(), Asteroid.SMALL));
         }
         createParticles(asteroid.getX(), asteroid.getY());
+        currentDelay = ((maxDelay - minDelay) * numAsteroidsLeft / numAsteroidsTotal) + minDelay;
     }
 
     @Override
